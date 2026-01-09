@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcripts - WorkflowAI</title>
+    <meta name="description"
+        content="View and manage all your meeting transcripts. Search, filter, and download transcripts.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .transcript-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .transcript-card:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .transcript-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .transcript-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .transcript-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .transcript-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .transcript-preview {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 15px;
+            max-height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .transcript-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, var(--bg-tertiary));
+        }
+
+        .transcript-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .speaker {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .transcript-viewer {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .transcript-viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .transcript-content {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        .transcript-line {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .transcript-line:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .transcript-timestamp {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            white-space: nowrap;
+            padding-top: 3px;
+        }
+
+        .transcript-text {
+            flex: 1;
+        }
+
+        .transcript-text .speaker-name {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .transcript-text p {
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 5px;
+            background: var(--bg-tertiary);
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1><a href="index.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a class="nav-item" href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="meetings.html">
+                    <i class="fas fa-video"></i>
+                    <span>Meetings</span>
+                    <span class="badge">5</span>
+                </a>
+                <a class="nav-item active" href="transcripts.html">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Transcripts</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">AI Processing</div>
+                <a class="nav-item" href="summaries.html">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Summaries</span>
+                </a>
+                <a class="nav-item" href="action-items.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Action Items</span>
+                    <span class="badge">12</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="page-header-left">
+                <h2>Transcripts</h2>
+                <p>View and manage all your meeting transcripts.</p>
+            </div>
+            <div class="page-header-actions">
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+                <input type="text" class="form-control" id="searchInput" placeholder="Search transcripts..."
+                    style="width: 250px;" oninput="filterTranscripts()">
+                <select class="form-control" id="clientFilter" style="width: auto; padding: 8px 15px;"
+                    onchange="filterTranscripts()">
+                    <option value="">All Clients</option>
+                    <option value="techcorp">TechCorp Inc.</option>
+                    <option value="mediapro">MediaPro LLC</option>
+                    <option value="acme">Acme Corp</option>
+                    <option value="internal">Internal</option>
+                </select>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="tabs" id="transcriptTabs">
+            <button class="tab active" data-filter="all">All Transcripts</button>
+            <button class="tab" data-filter="kickoff">Kickoff</button>
+            <button class="tab" data-filter="followup">Follow-up</button>
+            <button class="tab" data-filter="review">Review</button>
+            <button class="tab" data-filter="planning">Planning</button>
+        </div>
+
+        <!-- Transcripts List -->
+        <div class="content-card" id="transcriptsContainer">
+            <div class="section-header">
+                <h3><i class="fas fa-file-alt"></i> All Transcripts</h3>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;" id="transcriptCount">4 transcripts</span>
+            </div>
+
+            <div class="transcript-card" data-type="kickoff" data-client="techcorp">
+                <div class="transcript-header">
+                    <div>
+                        <div class="transcript-title">Kickoff Meeting - Website Redesign Project</div>
+                        <div class="transcript-meta">
+                            <span><i class="fas fa-calendar"></i> Today, 10:30 AM</span>
+                            <span><i class="fas fa-clock"></i> 45 minutes</span>
+                            <span><i class="fas fa-user"></i> 4 speakers</span>
+                            <span><i class="fas fa-building"></i> TechCorp Inc.</span>
+                        </div>
+                    </div>
+                    <span class="meeting-type type-kickoff">Kickoff</span>
+                </div>
+                <div class="transcript-preview">
+                    <p><span class="speaker">Brad:</span> Good morning everyone. Thanks for joining this kickoff meeting
+                        for the TechCorp website redesign project. I'd like to start by introducing...</p>
+                    <p><span class="speaker">John (Client):</span> Thank you Brad. We're excited to get started. As you
+                        know, our current website is...</p>
+                </div>
+                <div class="transcript-actions">
+                    <button class="action-btn primary" onclick="viewTranscript(0)"><i class="fas fa-eye"></i> View
+                        Full</button>
+                    <button class="action-btn" onclick="downloadTranscript()"><i class="fas fa-download"></i>
+                        Download</button>
+                    <button class="action-btn" onclick="copyTranscript()"><i class="fas fa-copy"></i> Copy</button>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> View Summary</a>
+                </div>
+            </div>
+
+            <div class="transcript-card" data-type="followup" data-client="mediapro">
+                <div class="transcript-header">
+                    <div>
+                        <div class="transcript-title">Weekly Client Sync - Marketing Campaign</div>
+                        <div class="transcript-meta">
+                            <span><i class="fas fa-calendar"></i> Yesterday, 2:00 PM</span>
+                            <span><i class="fas fa-clock"></i> 30 minutes</span>
+                            <span><i class="fas fa-user"></i> 3 speakers</span>
+                            <span><i class="fas fa-building"></i> MediaPro LLC</span>
+                        </div>
+                    </div>
+                    <span class="meeting-type type-followup">Follow-up</span>
+                </div>
+                <div class="transcript-preview">
+                    <p><span class="speaker">Sarah:</span> Hi everyone, let's do a quick check-in on the marketing
+                        campaign progress...</p>
+                    <p><span class="speaker">Client:</span> Yes, we've reviewed the latest designs and have some
+                        feedback...</p>
+                </div>
+                <div class="transcript-actions">
+                    <button class="action-btn primary" onclick="viewTranscript(1)"><i class="fas fa-eye"></i> View
+                        Full</button>
+                    <button class="action-btn" onclick="downloadTranscript()"><i class="fas fa-download"></i>
+                        Download</button>
+                    <button class="action-btn" onclick="copyTranscript()"><i class="fas fa-copy"></i> Copy</button>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> View Summary</a>
+                </div>
+            </div>
+
+            <div class="transcript-card" data-type="review" data-client="internal">
+                <div class="transcript-header">
+                    <div>
+                        <div class="transcript-title">Design Review - Mobile App V2</div>
+                        <div class="transcript-meta">
+                            <span><i class="fas fa-calendar"></i> 2 days ago</span>
+                            <span><i class="fas fa-clock"></i> 60 minutes</span>
+                            <span><i class="fas fa-user"></i> 6 speakers</span>
+                            <span><i class="fas fa-building"></i> Internal</span>
+                        </div>
+                    </div>
+                    <span class="meeting-type type-review">Review</span>
+                </div>
+                <div class="transcript-preview">
+                    <p><span class="speaker">Alex:</span> Let's walk through the latest mockups for the mobile app V2...
+                    </p>
+                    <p><span class="speaker">Mike:</span> I really like the new navigation structure. One thing to
+                        consider...</p>
+                </div>
+                <div class="transcript-actions">
+                    <button class="action-btn primary" onclick="viewTranscript(2)"><i class="fas fa-eye"></i> View
+                        Full</button>
+                    <button class="action-btn" onclick="downloadTranscript()"><i class="fas fa-download"></i>
+                        Download</button>
+                    <button class="action-btn" onclick="copyTranscript()"><i class="fas fa-copy"></i> Copy</button>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> View Summary</a>
+                </div>
+            </div>
+
+            <div class="transcript-card" data-type="planning" data-client="internal">
+                <div class="transcript-header">
+                    <div>
+                        <div class="transcript-title">Sprint Planning Q2</div>
+                        <div class="transcript-meta">
+                            <span><i class="fas fa-calendar"></i> 3 days ago</span>
+                            <span><i class="fas fa-clock"></i> 90 minutes</span>
+                            <span><i class="fas fa-user"></i> 8 speakers</span>
+                            <span><i class="fas fa-building"></i> Internal</span>
+                        </div>
+                    </div>
+                    <span class="meeting-type type-planning">Planning</span>
+                </div>
+                <div class="transcript-preview">
+                    <p><span class="speaker">Brad:</span> Welcome to our Q2 sprint planning session. Let's review the
+                        backlog...</p>
+                    <p><span class="speaker">Team:</span> Discussion about priority items and capacity planning...</p>
+                </div>
+                <div class="transcript-actions">
+                    <button class="action-btn primary" onclick="viewTranscript(3)"><i class="fas fa-eye"></i> View
+                        Full</button>
+                    <button class="action-btn" onclick="downloadTranscript()"><i class="fas fa-download"></i>
+                        Download</button>
+                    <button class="action-btn" onclick="copyTranscript()"><i class="fas fa-copy"></i> Copy</button>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> View Summary</a>
+                </div>
+            </div>
+
+            <!-- No Results -->
+            <div id="noResults" style="display: none; text-align: center; padding: 60px;">
+                <i class="fas fa-search" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 20px;"></i>
+                <h3 style="color: var(--text-secondary); margin-bottom: 10px;">No transcripts found</h3>
+                <p style="color: var(--text-muted);">Try adjusting your filters or search terms.</p>
+            </div>
+        </div>
+
+        <!-- Transcript Viewer -->
+        <div class="transcript-viewer" id="transcriptViewer" style="display: none;">
+            <div class="transcript-viewer-header">
+                <div>
+                    <h3 style="color: var(--text-primary); margin-bottom: 5px;" id="viewerTitle">Kickoff Meeting -
+                        Website Redesign Project</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Today, 10:30 AM • 45 minutes • 4
+                        speakers</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="downloadTranscript()"><i class="fas fa-download"></i>
+                        Download</button>
+                    <button class="btn btn-secondary" onclick="closeTranscript()"><i class="fas fa-times"></i>
+                        Close</button>
+                </div>
+            </div>
+
+            <div class="transcript-content">
+                <div class="transcript-line">
+                    <div class="transcript-timestamp">00:00:15</div>
+                    <div class="transcript-text">
+                        <div class="speaker-name">Brad (Project Lead)</div>
+                        <p>Good morning everyone. Thanks for joining this kickoff meeting for the TechCorp website
+                            redesign project. I'd like to start by introducing our team and then we'll dive into the
+                            project scope.</p>
+                    </div>
+                </div>
+
+                <div class="transcript-line">
+                    <div class="transcript-timestamp">00:01:32</div>
+                    <div class="transcript-text">
+                        <div class="speaker-name">John Smith (Client - TechCorp)</div>
+                        <p>Thank you Brad. We're excited to get started. As you know, our current website is about 5
+                            years old and it's really showing its age. We need something modern, mobile-friendly, and
+                            that better represents our brand.</p>
+                    </div>
+                </div>
+
+                <div class="transcript-line">
+                    <div class="transcript-timestamp">00:03:45</div>
+                    <div class="transcript-text">
+                        <div class="speaker-name">Sarah (Designer)</div>
+                        <p>Absolutely John. We've reviewed your current site and your competitor analysis. I have some
+                            initial ideas about the direction we could take. Would you like me to share my screen?</p>
+                    </div>
+                </div>
+
+                <div class="transcript-line">
+                    <div class="transcript-timestamp">00:04:12</div>
+                    <div class="transcript-text">
+                        <div class="speaker-name">John Smith (Client - TechCorp)</div>
+                        <p>Yes please, that would be great. We're particularly interested in seeing how you'd approach
+                            the homepage and main navigation.</p>
+                    </div>
+                </div>
+
+                <div class="transcript-line">
+                    <div class="transcript-timestamp">00:05:30</div>
+                    <div class="transcript-text">
+                        <div class="speaker-name">Mike (Developer)</div>
+                        <p>I'd also like to understand more about your CRM integration requirements. You mentioned
+                            wanting to connect the contact forms directly to your system.</p>
+                    </div>
+                </div>
+
+                <div class="transcript-line">
+                    <div class="transcript-timestamp">00:06:45</div>
+                    <div class="transcript-text">
+                        <div class="speaker-name">Jane Doe (Client - TechCorp)</div>
+                        <p>Yes, that's a priority for us. We're using Salesforce and need all leads to go directly
+                            there. Also, we'd like to track which pages users visit before submitting a form.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2026 WorkflowAI. All rights reserved. | <a href="index.html">Home</a> | <a
+                    href="settings.html">Settings</a> | <a href="#">Help</a></p>
+        </footer>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        // Tab Filtering
+        let currentFilter = 'all';
+
+        document.querySelectorAll('#transcriptTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('#transcriptTabs .tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                filterTranscripts();
+            });
+        });
+
+        function filterTranscripts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const clientFilter = document.getElementById('clientFilter').value;
+            const transcripts = document.querySelectorAll('.transcript-card');
+            let visibleCount = 0;
+
+            transcripts.forEach(transcript => {
+                const type = transcript.dataset.type;
+                const client = transcript.dataset.client;
+                const title = transcript.querySelector('.transcript-title').textContent.toLowerCase();
+
+                const matchesType = currentFilter === 'all' || type === currentFilter;
+                const matchesClient = !clientFilter || client === clientFilter;
+                const matchesSearch = !searchTerm || title.includes(searchTerm);
+
+                if (matchesType && matchesClient && matchesSearch) {
+                    transcript.style.display = '';
+                    visibleCount++;
+                } else {
+                    transcript.style.display = 'none';
+                }
+            });
+
+            document.getElementById('transcriptCount').textContent = `${visibleCount} transcript${visibleCount !== 1 ? 's' : ''}`;
+            document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // Transcript Viewer
+        function viewTranscript(index) {
+            document.getElementById('transcriptViewer').style.display = 'block';
+            document.getElementById('transcriptViewer').scrollIntoView({ behavior: 'smooth' });
+            showToast('info', 'Transcript Loaded', 'Full transcript is now displayed below.');
+        }
+
+        function closeTranscript() {
+            document.getElementById('transcriptViewer').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function downloadTranscript() {
+            showToast('success', 'Download Started', 'Your transcript is being downloaded...');
+        }
+
+        function copyTranscript() {
+            showToast('success', 'Copied!', 'Transcript copied to clipboard.');
+        }
+
+        // Toast Notification
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'fa-check-circle';
+            if (type === 'warning') icon = 'fa-exclamation-circle';
+            if (type === 'info') icon = 'fa-info-circle';
+
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas ${icon}"></i></div>
+                <div class="toast-content">
+                    <div class="title">${title}</div>
+                    <div class="message">${message}</div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+
+</html>

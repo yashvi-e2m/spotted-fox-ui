@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - WorkflowAI</title>
+    <meta name="description"
+        content="Configure your WorkflowAI settings including integrations, AI processing options, and review preferences.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .settings-section {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .settings-section h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            flex: 1;
+        }
+
+        .settings-label h4 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .settings-label p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .settings-control {
+            min-width: 200px;
+            text-align: right;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            display: inline-block;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background-color: var(--primary);
+        }
+
+        .toggle-switch input:checked+.toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .integration-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .integration-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .integration-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .integration-info {
+            flex: 1;
+        }
+
+        .integration-info h4 {
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .integration-info p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .connected-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: var(--secondary-green-pale);
+            color: var(--secondary-green);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .disconnected-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .settings-nav {
+            position: sticky;
+            top: 20px;
+        }
+
+        .settings-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .settings-nav-item:hover,
+        .settings-nav-item.active {
+            background: var(--primary-pale);
+            color: var(--primary);
+        }
+
+        .theme-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            color: white;
+        }
+
+        .theme-section h3 {
+            color: white;
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .theme-option {
+            flex: 1;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-option.active {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .theme-option i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1><a href="index.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a class="nav-item" href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="meetings.html">
+                    <i class="fas fa-video"></i>
+                    <span>Meetings</span>
+                    <span class="badge">5</span>
+                </a>
+                <a class="nav-item" href="transcripts.html">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Transcripts</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">AI Processing</div>
+                <a class="nav-item" href="summaries.html">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Summaries</span>
+                </a>
+                <a class="nav-item" href="action-items.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Action Items</span>
+                    <span class="badge">12</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a class="nav-item active" href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="page-header-left">
+                <h2>Settings</h2>
+                <p>Configure your WorkflowAI preferences and integrations.</p>
+            </div>
+            <div class="page-header-actions">
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+        </header>
+
+        <div style="display: grid; grid-template-columns: 250px 1fr; gap: 30px;">
+            <!-- Settings Navigation -->
+            <div class="settings-nav">
+                <a href="#appearance" class="settings-nav-item active" onclick="scrollToSection('appearance')">
+                    <i class="fas fa-palette"></i> Appearance
+                </a>
+                <a href="#recording" class="settings-nav-item" onclick="scrollToSection('recording')">
+                    <i class="fas fa-microphone"></i> Recording
+                </a>
+                <a href="#ai-processing" class="settings-nav-item" onclick="scrollToSection('ai-processing')">
+                    <i class="fas fa-brain"></i> AI Processing
+                </a>
+                <a href="#integrations" class="settings-nav-item" onclick="scrollToSection('integrations')">
+                    <i class="fas fa-plug"></i> Integrations
+                </a>
+                <a href="#notifications" class="settings-nav-item" onclick="scrollToSection('notifications')">
+                    <i class="fas fa-bell"></i> Notifications
+                </a>
+                <a href="#review" class="settings-nav-item" onclick="scrollToSection('review')">
+                    <i class="fas fa-user-check"></i> Review Settings
+                </a>
+                <a href="#account" class="settings-nav-item" onclick="scrollToSection('account')">
+                    <i class="fas fa-user"></i> Account
+                </a>
+            </div>
+
+            <!-- Settings Content -->
+            <div>
+                <!-- Appearance / Theme Settings -->
+                <div class="theme-section" id="appearance">
+                    <h3><i class="fas fa-palette"></i> Appearance</h3>
+                    <p style="opacity: 0.9; margin-bottom: 20px;">Choose your preferred theme. This setting is saved
+                        automatically.</p>
+
+                    <div class="theme-options">
+                        <div class="theme-option" id="lightThemeBtn" onclick="setTheme('light')">
+                            <i class="fas fa-sun"></i>
+                            <strong>Light Mode</strong>
+                            <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 5px;">Clean and bright</p>
+                        </div>
+                        <div class="theme-option" id="darkThemeBtn" onclick="setTheme('dark')">
+                            <i class="fas fa-moon"></i>
+                            <strong>Dark Mode</strong>
+                            <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 5px;">Easy on the eyes</p>
+                        </div>
+                        <div class="theme-option" id="autoThemeBtn" onclick="setTheme('auto')">
+                            <i class="fas fa-desktop"></i>
+                            <strong>System</strong>
+                            <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 5px;">Match device settings</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recording Settings -->
+                <div class="settings-section" id="recording">
+                    <h3><i class="fas fa-microphone"></i> Recording Integration</h3>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Primary Recording Tool</h4>
+                            <p>Select your preferred meeting recording platform</p>
+                        </div>
+                        <div class="settings-control">
+                            <select class="form-control" style="width: 200px;"
+                                onchange="showToast('success', 'Updated', 'Recording tool updated.')">
+                                <option selected>Otter.ai</option>
+                                <option>Fathom</option>
+                                <option>Fireflies.ai</option>
+                                <option>Grain</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>API Key</h4>
+                            <p>Your recording platform API key for automatic sync</p>
+                        </div>
+                        <div class="settings-control">
+                            <input type="password" class="form-control" value="••••••••••••••••" style="width: 200px;">
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Auto-sync New Recordings</h4>
+                            <p>Automatically import new recordings when available</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Auto-sync ' + (this.checked ? 'enabled' : 'disabled') + '.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Processing Settings -->
+                <div class="settings-section" id="ai-processing">
+                    <h3><i class="fas fa-brain"></i> AI Processing</h3>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Auto-generate Summary</h4>
+                            <p>Automatically create AI summaries for new meetings</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Extract Action Items</h4>
+                            <p>Automatically identify who, what, and when from conversations</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Identify Client Requests</h4>
+                            <p>Extract feature requests, changes, and requirements</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Auto-assign Owners by Role</h4>
+                            <p>Automatically assign tasks based on team member roles</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Integrations -->
+                <div class="settings-section" id="integrations">
+                    <h3><i class="fas fa-plug"></i> Integrations</h3>
+
+                    <div class="integration-card">
+                        <div class="integration-icon" style="background: #ff3366; color: white;">
+                            <i class="fab fa-slack"></i>
+                        </div>
+                        <div class="integration-info">
+                            <h4>Slack</h4>
+                            <p>Send notifications and updates to your team channels</p>
+                        </div>
+                        <span class="connected-badge"><i class="fas fa-check"></i> Connected</span>
+                        <button class="btn btn-secondary" style="padding: 8px 15px;"
+                            onclick="showToast('info', 'Configure', 'Opening Slack settings...')">Configure</button>
+                    </div>
+
+                    <div class="integration-card">
+                        <div class="integration-icon" style="background: #0073ea; color: white;">
+                            <i class="fas fa-columns"></i>
+                        </div>
+                        <div class="integration-info">
+                            <h4>Monday.com</h4>
+                            <p>Create tasks and sync with your project boards</p>
+                        </div>
+                        <span class="connected-badge"><i class="fas fa-check"></i> Connected</span>
+                        <button class="btn btn-secondary" style="padding: 8px 15px;"
+                            onclick="showToast('info', 'Configure', 'Opening Monday.com settings...')">Configure</button>
+                    </div>
+
+                    <div class="integration-card">
+                        <div class="integration-icon" style="background: #ea4335; color: white;">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <div class="integration-info">
+                            <h4>Gmail</h4>
+                            <p>Send follow-up emails directly from WorkflowAI</p>
+                        </div>
+                        <span class="connected-badge"><i class="fas fa-check"></i> Connected</span>
+                        <button class="btn btn-secondary" style="padding: 8px 15px;"
+                            onclick="showToast('info', 'Configure', 'Opening Gmail settings...')">Configure</button>
+                    </div>
+
+                    <div class="integration-card">
+                        <div class="integration-icon" style="background: #00a4ef; color: white;">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div class="integration-info">
+                            <h4>Salesforce</h4>
+                            <p>Sync client data and meeting notes with your CRM</p>
+                        </div>
+                        <span class="disconnected-badge"><i class="fas fa-times"></i> Not Connected</span>
+                        <button class="btn btn-primary" style="padding: 8px 15px;"
+                            onclick="connectIntegration('Salesforce')">Connect</button>
+                    </div>
+
+                    <div class="integration-card">
+                        <div class="integration-icon" style="background: #000000; color: white;">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <div class="integration-info">
+                            <h4>Notion</h4>
+                            <p>Save meeting notes and summaries to Notion pages</p>
+                        </div>
+                        <span class="disconnected-badge"><i class="fas fa-times"></i> Not Connected</span>
+                        <button class="btn btn-primary" style="padding: 8px 15px;"
+                            onclick="connectIntegration('Notion')">Connect</button>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="settings-section" id="notifications">
+                    <h3><i class="fas fa-bell"></i> Notifications</h3>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Email Notifications</h4>
+                            <p>Receive email updates about meeting processing status</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Slack Notifications</h4>
+                            <p>Get notified in Slack when processing is complete</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Notification Channel</h4>
+                            <p>Slack channel for team notifications</p>
+                        </div>
+                        <div class="settings-control">
+                            <input type="text" class="form-control" value="#project-updates" style="width: 200px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Settings -->
+                <div class="settings-section" id="review">
+                    <h3><i class="fas fa-user-check"></i> Review Settings</h3>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Require Review for Kickoff Meetings</h4>
+                            <p>Human review before sending outputs for kickoff meetings</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Require Review for Client Emails</h4>
+                            <p>Human review before sending follow-up emails to clients</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked
+                                    onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Require Review for Internal Meetings</h4>
+                            <p>Human review for internal team meeting outputs</p>
+                        </div>
+                        <div class="settings-control">
+                            <label class="toggle-switch">
+                                <input type="checkbox" onchange="showToast('success', 'Updated', 'Setting updated.')">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Default Reviewer</h4>
+                            <p>Team member who should review outputs by default</p>
+                        </div>
+                        <div class="settings-control">
+                            <select class="form-control" style="width: 200px;"
+                                onchange="showToast('success', 'Updated', 'Default reviewer updated.')">
+                                <option>Brad (Project Lead)</option>
+                                <option>Madison (Account Manager)</option>
+                                <option>Sarah (Designer)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="settings-section" id="account">
+                    <h3><i class="fas fa-user"></i> Account</h3>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Email Address</h4>
+                            <p>Your account email</p>
+                        </div>
+                        <div class="settings-control">
+                            <input type="email" class="form-control" value="team@company.com" style="width: 250px;">
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Company Name</h4>
+                            <p>Your organization name</p>
+                        </div>
+                        <div class="settings-control">
+                            <input type="text" class="form-control" value="Awesome Agency" style="width: 250px;">
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Timezone</h4>
+                            <p>Your local timezone for scheduling</p>
+                        </div>
+                        <div class="settings-control">
+                            <select class="form-control" style="width: 250px;">
+                                <option>Asia/Kolkata (GMT+5:30)</option>
+                                <option>America/New_York (GMT-5)</option>
+                                <option>America/Los_Angeles (GMT-8)</option>
+                                <option>Europe/London (GMT+0)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-row">
+                        <div class="settings-label">
+                            <h4>Change Password</h4>
+                            <p>Update your account password</p>
+                        </div>
+                        <div class="settings-control">
+                            <button class="btn btn-secondary"
+                                onclick="showToast('info', 'Password', 'Opening password change dialog...')"><i
+                                    class="fas fa-key"></i> Change Password</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-row"
+                        style="border-top: 2px solid #ffebee; padding-top: 25px; margin-top: 10px;">
+                        <div class="settings-label">
+                            <h4 style="color: #c62828;">Delete Account</h4>
+                            <p>Permanently delete your account and all data</p>
+                        </div>
+                        <div class="settings-control">
+                            <button class="btn" style="background: #ffebee; color: #c62828; border: 1px solid #ffcdd2;"
+                                onclick="deleteAccount()"><i class="fas fa-trash"></i> Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2026 WorkflowAI. All rights reserved. | <a href="index.html">Home</a> | <a
+                    href="settings.html">Settings</a> | <a href="#">Help</a></p>
+        </footer>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Theme Functions
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
+        }
+
+        function setTheme(theme) {
+            if (theme === 'auto') {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+                localStorage.setItem('theme', 'auto');
+            } else {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+            updateThemeButtons();
+            showToast('success', 'Theme Updated', `Theme set to ${theme === 'auto' ? 'system' : theme} mode.`);
+        }
+
+        function updateThemeButtons() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.querySelectorAll('.theme-option').forEach(btn => btn.classList.remove('active'));
+
+            if (savedTheme === 'light') {
+                document.getElementById('lightThemeBtn').classList.add('active');
+            } else if (savedTheme === 'dark') {
+                document.getElementById('darkThemeBtn').classList.add('active');
+            } else {
+                document.getElementById('autoThemeBtn').classList.add('active');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'auto') {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+            updateThemeButtons();
+        });
+
+        // Navigation
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
+            event.target.closest('.settings-nav-item').classList.add('active');
+        }
+
+        // Actions
+        function connectIntegration(name) {
+            showToast('info', 'Connecting', `Opening ${name} authorization...`);
+            setTimeout(() => {
+                showToast('success', 'Connected!', `${name} has been successfully connected.`);
+            }, 2000);
+        }
+
+        function saveSettings() {
+            showToast('success', 'Settings Saved', 'Your preferences have been updated successfully.');
+        }
+
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                showToast('warning', 'Account Deletion', 'Processing account deletion request...');
+            }
+        }
+
+        // Toast Notification
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'fa-check-circle';
+            if (type === 'warning') icon = 'fa-exclamation-circle';
+            if (type === 'info') icon = 'fa-info-circle';
+
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas ${icon}"></i></div>
+                <div class="toast-content">
+                    <div class="title">${title}</div>
+                    <div class="message">${message}</div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+
+</html>

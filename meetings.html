@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetings - WorkflowAI</title>
+    <meta name="description"
+        content="View and manage all your meetings. Track progress, view transcripts, and manage workflows.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1><a href="index.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a class="nav-item" href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item active" href="meetings.html">
+                    <i class="fas fa-video"></i>
+                    <span>Meetings</span>
+                    <span class="badge">5</span>
+                </a>
+                <a class="nav-item" href="transcripts.html">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Transcripts</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">AI Processing</div>
+                <a class="nav-item" href="summaries.html">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Summaries</span>
+                </a>
+                <a class="nav-item" href="action-items.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Action Items</span>
+                    <span class="badge">12</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="page-header-left">
+                <h2>Meetings</h2>
+                <p>View and manage all your meeting recordings and workflows.</p>
+            </div>
+            <div class="page-header-actions">
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="content-card">
+            <div class="section-header" style="margin-bottom: 0;">
+                <div class="tabs" id="meetingTabs">
+                    <button class="tab active" data-filter="all">All Meetings</button>
+                    <button class="tab" data-filter="kickoff">Kickoff</button>
+                    <button class="tab" data-filter="followup">Follow-up</button>
+                    <button class="tab" data-filter="review">Review</button>
+                    <button class="tab" data-filter="planning">Planning</button>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search meetings..."
+                        style="width: 250px; padding: 8px 15px;" oninput="filterMeetings()">
+                    <select class="form-control" id="clientFilter" style="width: auto; padding: 8px 15px;"
+                        onchange="filterMeetings()">
+                        <option value="">All Clients</option>
+                        <option value="techcorp">TechCorp Inc.</option>
+                        <option value="mediapro">MediaPro LLC</option>
+                        <option value="acme">Acme Corp</option>
+                        <option value="internal">Internal</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Meetings List -->
+        <div class="content-card" id="meetingsContainer">
+            <div class="meeting-card" data-type="kickoff" data-client="techcorp">
+                <div class="meeting-card-header">
+                    <div>
+                        <div class="meeting-title">Kickoff Meeting - Website Redesign Project</div>
+                        <span class="meeting-type type-kickoff">Kickoff</span>
+                    </div>
+                    <span class="priority high">High Priority</span>
+                </div>
+                <div class="meeting-meta">
+                    <span><i class="fas fa-calendar"></i> Today, 10:30 AM</span>
+                    <span><i class="fas fa-clock"></i> 45 minutes</span>
+                    <span><i class="fas fa-user"></i> 4 participants</span>
+                    <span><i class="fas fa-building"></i> TechCorp Inc.</span>
+                </div>
+                <div class="meeting-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>75% Complete</span>
+                        <span>Pending: Human Review</span>
+                    </div>
+                </div>
+                <div class="meeting-actions">
+                    <a href="transcripts.html" class="action-btn"><i class="fas fa-file-alt"></i> View Transcript</a>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> AI Summary</a>
+                    <a href="action-items.html" class="action-btn"><i class="fas fa-tasks"></i> 6 Action Items</a>
+                    <button class="action-btn primary" onclick="openModal('reviewModal')"><i class="fas fa-check"></i>
+                        Review & Approve</button>
+                </div>
+            </div>
+
+            <div class="meeting-card" data-type="followup" data-client="mediapro">
+                <div class="meeting-card-header">
+                    <div>
+                        <div class="meeting-title">Weekly Client Sync - Marketing Campaign</div>
+                        <span class="meeting-type type-followup">Follow-up</span>
+                    </div>
+                    <span class="priority medium">Medium Priority</span>
+                </div>
+                <div class="meeting-meta">
+                    <span><i class="fas fa-calendar"></i> Yesterday, 2:00 PM</span>
+                    <span><i class="fas fa-clock"></i> 30 minutes</span>
+                    <span><i class="fas fa-user"></i> 3 participants</span>
+                    <span><i class="fas fa-building"></i> MediaPro LLC</span>
+                </div>
+                <div class="meeting-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>100% Complete</span>
+                        <span>Email Sent ✓</span>
+                    </div>
+                </div>
+                <div class="meeting-actions">
+                    <a href="transcripts.html" class="action-btn"><i class="fas fa-file-alt"></i> View Transcript</a>
+                    <button class="action-btn" onclick="openModal('emailModal')"><i class="fas fa-envelope"></i> View
+                        Email</button>
+                    <button class="action-btn"
+                        onclick="showToast('info', 'Monday Tasks', 'Opening Monday.com tasks...')"><i
+                            class="fas fa-columns"></i> Monday Tasks</button>
+                </div>
+            </div>
+
+            <div class="meeting-card" data-type="review" data-client="internal">
+                <div class="meeting-card-header">
+                    <div>
+                        <div class="meeting-title">Design Review - Mobile App V2</div>
+                        <span class="meeting-type type-review">Review</span>
+                    </div>
+                    <span class="priority low">Low Priority</span>
+                </div>
+                <div class="meeting-meta">
+                    <span><i class="fas fa-calendar"></i> 2 days ago</span>
+                    <span><i class="fas fa-clock"></i> 60 minutes</span>
+                    <span><i class="fas fa-user"></i> 6 participants</span>
+                    <span><i class="fas fa-building"></i> Internal</span>
+                </div>
+                <div class="meeting-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>50% Complete</span>
+                        <span>AI Processing</span>
+                    </div>
+                </div>
+                <div class="meeting-actions">
+                    <a href="transcripts.html" class="action-btn"><i class="fas fa-file-alt"></i> View Transcript</a>
+                    <button class="action-btn" disabled><i class="fas fa-spinner fa-spin"></i> Processing...</button>
+                </div>
+            </div>
+
+            <div class="meeting-card" data-type="planning" data-client="internal">
+                <div class="meeting-card-header">
+                    <div>
+                        <div class="meeting-title">Sprint Planning Q2</div>
+                        <span class="meeting-type type-planning">Planning</span>
+                    </div>
+                    <span class="priority medium">Medium Priority</span>
+                </div>
+                <div class="meeting-meta">
+                    <span><i class="fas fa-calendar"></i> 3 days ago</span>
+                    <span><i class="fas fa-clock"></i> 90 minutes</span>
+                    <span><i class="fas fa-user"></i> 8 participants</span>
+                    <span><i class="fas fa-building"></i> Internal</span>
+                </div>
+                <div class="meeting-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>100% Complete</span>
+                        <span>All Tasks Created ✓</span>
+                    </div>
+                </div>
+                <div class="meeting-actions">
+                    <a href="transcripts.html" class="action-btn"><i class="fas fa-file-alt"></i> View Transcript</a>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> AI Summary</a>
+                    <a href="action-items.html" class="action-btn"><i class="fas fa-tasks"></i> 12 Action Items</a>
+                </div>
+            </div>
+
+            <div class="meeting-card" data-type="kickoff" data-client="acme">
+                <div class="meeting-card-header">
+                    <div>
+                        <div class="meeting-title">Client Onboarding - Acme Corp</div>
+                        <span class="meeting-type type-kickoff">Kickoff</span>
+                    </div>
+                    <span class="priority high">High Priority</span>
+                </div>
+                <div class="meeting-meta">
+                    <span><i class="fas fa-calendar"></i> 5 days ago</span>
+                    <span><i class="fas fa-clock"></i> 55 minutes</span>
+                    <span><i class="fas fa-user"></i> 5 participants</span>
+                    <span><i class="fas fa-building"></i> Acme Corp</span>
+                </div>
+                <div class="meeting-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>100% Complete</span>
+                        <span>All Actions Complete ✓</span>
+                    </div>
+                </div>
+                <div class="meeting-actions">
+                    <a href="transcripts.html" class="action-btn"><i class="fas fa-file-alt"></i> View Transcript</a>
+                    <a href="summaries.html" class="action-btn"><i class="fas fa-brain"></i> AI Summary</a>
+                    <button class="action-btn" onclick="openModal('emailModal')"><i class="fas fa-envelope"></i> View
+                        Email</button>
+                </div>
+            </div>
+
+            <!-- No Results Message -->
+            <div id="noResults" class="content-card" style="display: none; text-align: center; padding: 60px;">
+                <i class="fas fa-search" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 20px;"></i>
+                <h3 style="color: var(--text-secondary); margin-bottom: 10px;">No meetings found</h3>
+                <p style="color: var(--text-muted);">Try adjusting your filters or search terms.</p>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+            <button class="btn btn-secondary" style="padding: 8px 15px;"
+                onclick="showToast('info', 'Page', 'Already on first page')"><i
+                    class="fas fa-chevron-left"></i></button>
+            <button class="btn btn-primary" style="padding: 8px 15px;">1</button>
+            <button class="btn btn-secondary" style="padding: 8px 15px;"
+                onclick="showToast('info', 'Page 2', 'Loading page 2...')">2</button>
+            <button class="btn btn-secondary" style="padding: 8px 15px;"
+                onclick="showToast('info', 'Page 3', 'Loading page 3...')">3</button>
+            <button class="btn btn-secondary" style="padding: 8px 15px;"
+                onclick="showToast('info', 'Next', 'Loading next page...')"><i
+                    class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2026 WorkflowAI. All rights reserved. | <a href="index.html">Home</a> | <a
+                    href="settings.html">Settings</a> | <a href="#">Help</a></p>
+        </footer>
+    </main>
+
+    <!-- Upload Recording Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-upload"></i> Upload Meeting Recording</h3>
+                <button class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Meeting Title</label>
+                    <input type="text" class="form-control" placeholder="e.g., Client Kickoff - Acme Corp">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Meeting Type</label>
+                        <select class="form-control">
+                            <option value="">Select type...</option>
+                            <option value="kickoff">Kickoff Meeting</option>
+                            <option value="followup">Follow-up</option>
+                            <option value="review">Review</option>
+                            <option value="planning">Planning</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Client/Project</label>
+                        <select class="form-control">
+                            <option value="">Select client...</option>
+                            <option value="techcorp">TechCorp Inc.</option>
+                            <option value="mediapro">MediaPro LLC</option>
+                            <option value="internal">Internal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Upload Recording File</label>
+                    <div style="border: 2px dashed var(--border-color); border-radius: 10px; padding: 40px; text-align: center; cursor: pointer;"
+                        onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 2rem; color: var(--text-muted); margin-bottom: 10px;"></i>
+                        <p style="color: var(--text-secondary);">Drag & drop your file here or click to browse</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Supports MP3, MP4, WAV, M4A</p>
+                        <input type="file" id="fileInput" style="display: none;" accept=".mp3,.mp4,.wav,.m4a"
+                            onchange="handleFileSelect(this)">
+                    </div>
+                    <div id="selectedFile"
+                        style="display: none; margin-top: 15px; padding: 10px; background: var(--primary-pale); border-radius: 8px;">
+                        <i class="fas fa-file-audio" style="color: var(--primary);"></i>
+                        <span id="fileName" style="margin-left: 10px; color: var(--text-primary);"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('uploadModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="startProcessing()">
+                    <i class="fas fa-rocket"></i> Start Processing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal-overlay" id="reviewModal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-check"></i> Review & Approve</h3>
+                <button class="modal-close" onclick="closeModal('reviewModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div
+                    style="background: var(--secondary-orange-pale); border: 1px solid var(--secondary-orange); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <p style="color: #e65100;"><i class="fas fa-exclamation-triangle"></i> <strong>Review
+                            Required:</strong> Please review the AI-generated content before approving.</p>
+                </div>
+
+                <div class="form-group">
+                    <label>AI Summary Preview</label>
+                    <div
+                        style="background: var(--bg-tertiary); padding: 15px; border-radius: 8px; color: var(--text-secondary);">
+                        This kickoff meeting with TechCorp focused on their website redesign project. Key objectives
+                        include modernizing the UI, improving mobile responsiveness, and integrating their new CRM
+                        system.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Action Items (6)</label>
+                    <div style="background: var(--bg-tertiary); padding: 15px; border-radius: 8px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <input type="checkbox" checked> <span style="color: var(--text-primary);">Send brand
+                                guidelines document - Sarah</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <input type="checkbox" checked> <span style="color: var(--text-primary);">Set up staging
+                                environment - Mike</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <input type="checkbox" checked> <span style="color: var(--text-primary);">Create initial
+                                wireframes - Alex</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" checked> <span style="color: var(--text-primary);">Draft project
+                                timeline - Brad</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('reviewModal')">Cancel</button>
+                <button class="btn btn-warning" onclick="requestChanges()"><i class="fas fa-edit"></i> Request
+                    Changes</button>
+                <button class="btn btn-primary" onclick="approveAndSend()"><i class="fas fa-check"></i> Approve &
+                    Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Preview Modal -->
+    <div class="modal-overlay" id="emailModal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-envelope"></i> Email Preview</h3>
+                <button class="modal-close" onclick="closeModal('emailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>To:</label>
+                    <input type="text" class="form-control" value="john.smith@techcorp.com, jane.doe@techcorp.com">
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" class="form-control" value="Meeting Follow-up - Website Redesign Kickoff">
+                </div>
+                <div class="form-group">
+                    <label>Email Body:</label>
+                    <div
+                        style="background: var(--bg-tertiary); padding: 20px; border-radius: 8px; color: var(--text-primary); line-height: 1.8;">
+                        <p>Hi John and Jane,</p>
+                        <br>
+                        <p>Thank you for taking the time to meet with us today to discuss your website redesign project.
+                            We're excited to partner with TechCorp on this initiative!</p>
+                        <br>
+                        <p><strong>Summary of Discussion:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Modernizing UI with clean, contemporary design</li>
+                            <li>Mobile-first responsive approach</li>
+                            <li>CRM integration for contact forms</li>
+                        </ul>
+                        <br>
+                        <p>Best regards,<br>The Team</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('emailModal')">Close</button>
+                <button class="btn btn-primary" onclick="resendEmail()"><i class="fas fa-paper-plane"></i> Resend
+                    Email</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // Tab Filtering
+        let currentFilter = 'all';
+
+        document.querySelectorAll('#meetingTabs .tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                document.querySelectorAll('#meetingTabs .tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                filterMeetings();
+            });
+        });
+
+        function filterMeetings() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const clientFilter = document.getElementById('clientFilter').value;
+            const meetings = document.querySelectorAll('.meeting-card[data-type]');
+            let visibleCount = 0;
+
+            meetings.forEach(meeting => {
+                const type = meeting.dataset.type;
+                const client = meeting.dataset.client;
+                const title = meeting.querySelector('.meeting-title').textContent.toLowerCase();
+
+                const matchesType = currentFilter === 'all' || type === currentFilter;
+                const matchesClient = !clientFilter || client === clientFilter;
+                const matchesSearch = !searchTerm || title.includes(searchTerm);
+
+                if (matchesType && matchesClient && matchesSearch) {
+                    meeting.classList.remove('hidden');
+                    meeting.style.display = '';
+                    visibleCount++;
+                } else {
+                    meeting.classList.add('hidden');
+                    meeting.style.display = 'none';
+                }
+            });
+
+            // Show/hide no results message
+            document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        // File Upload Handler
+        function handleFileSelect(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('fileName').textContent = input.files[0].name;
+                document.getElementById('selectedFile').style.display = 'block';
+            }
+        }
+
+        // Toast Notification
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'fa-check-circle';
+            if (type === 'warning') icon = 'fa-exclamation-circle';
+            if (type === 'info') icon = 'fa-info-circle';
+
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas ${icon}"></i></div>
+                <div class="toast-content">
+                    <div class="title">${title}</div>
+                    <div class="message">${message}</div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Action Functions
+        function startProcessing() {
+            closeModal('uploadModal');
+            showToast('success', 'Upload Started', 'Your meeting recording is being processed...');
+            document.getElementById('selectedFile').style.display = 'none';
+        }
+
+        function approveAndSend() {
+            closeModal('reviewModal');
+            showToast('success', 'Approved!', 'Tasks created in Monday and email sent to client.');
+        }
+
+        function requestChanges() {
+            closeModal('reviewModal');
+            showToast('warning', 'Changes Requested', 'The meeting summary has been sent back for revision.');
+        }
+
+        function resendEmail() {
+            closeModal('emailModal');
+            showToast('success', 'Email Resent', 'The follow-up email has been sent again.');
+        }
+    </script>
+</body>
+
+</html>

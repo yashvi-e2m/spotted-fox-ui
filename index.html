@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkflowAI - Automate Your Meeting Workflows</title>
+    <meta name="description"
+        content="Transform your meeting recordings into actionable workflows. AI-powered transcription, summaries, action items, and integrations.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="landing-page">
+    <!-- Navigation -->
+    <nav class="landing-nav" id="navbar">
+        <a href="index.html" class="logo">
+            <i class="fas fa-robot"></i>
+            <span>WorkflowAI</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+        </ul>
+
+        <div class="nav-cta">
+            <div class="theme-toggle" onclick="toggleTheme()" style="background: rgba(255,255,255,0.2);">
+                <i class="fas fa-sun" style="color: #ffc107;"></i>
+                <i class="fas fa-moon" style="color: #fff;"></i>
+            </div>
+            <a href="dashboard.html" class="btn btn-outline">Login</a>
+            <a href="dashboard.html" class="btn btn-primary">Get Started Free</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Turn Your Meetings Into<br><span>Automated Workflows</span></h1>
+            <p>Record, transcribe, and let AI extract action items, send follow-up emails, and create tasks in your
+                project management tools—all automatically.</p>
+
+            <div class="hero-buttons">
+                <a href="dashboard.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-rocket"></i> Start Free Trial
+                </a>
+                <a href="#how-it-works" class="btn btn-outline btn-lg">
+                    <i class="fas fa-play-circle"></i> Watch Demo
+                </a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <h3>10,000+</h3>
+                    <p>Meetings Processed</p>
+                </div>
+                <div class="hero-stat">
+                    <h3>85%</h3>
+                    <p>Time Saved</p>
+                </div>
+                <div class="hero-stat">
+                    <h3>500+</h3>
+                    <p>Happy Teams</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Everything You Need</h2>
+            <p>Powerful features to automate your entire meeting workflow from start to finish.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card"
+                onclick="showToast('info', 'Transcription', 'Learn more about AI transcription...')">
+                <div class="feature-icon blue">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <h3>Smart Transcription</h3>
+                <p>Accurate AI-powered transcription with speaker identification. Integrates with Otter.ai, Fathom, and
+                    more.</p>
+            </div>
+
+            <div class="feature-card" onclick="showToast('info', 'AI Summaries', 'Learn more about AI summaries...')">
+                <div class="feature-icon green">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI Summaries</h3>
+                <p>Instant meeting summaries highlighting key decisions, client requests, and discussion points.</p>
+            </div>
+
+            <div class="feature-card" onclick="showToast('info', 'Action Items', 'Learn more about action items...')">
+                <div class="feature-icon orange">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Action Item Extraction</h3>
+                <p>Automatically identify who needs to do what, and by when. No more missed follow-ups.</p>
+            </div>
+
+            <div class="feature-card"
+                onclick="showToast('info', 'Email Automation', 'Learn more about email automation...')">
+                <div class="feature-icon blue">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Email Automation</h3>
+                <p>Draft and send professional follow-up emails to clients and team members automatically.</p>
+            </div>
+
+            <div class="feature-card" onclick="showToast('info', 'Task Creation', 'Learn more about task creation...')">
+                <div class="feature-icon green">
+                    <i class="fas fa-columns"></i>
+                </div>
+                <h3>Task Creation</h3>
+                <p>Push action items directly to Monday.com, Asana, Jira, or your favorite project tool.</p>
+            </div>
+
+            <div class="feature-card" onclick="showToast('info', 'Human Review', 'Learn more about human review...')">
+                <div class="feature-icon orange">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <h3>Human-in-the-Loop</h3>
+                <p>Review, edit, and approve AI-generated content before it goes out. Stay in control.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-title">
+            <h2>How It Works</h2>
+            <p>Get started in minutes with our simple 4-step process.</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-card" onclick="showToast('info', 'Step 1', 'Connect your recording tool')">
+                <div class="step-number">1</div>
+                <h3>Connect</h3>
+                <p>Link your meeting recording tool like Otter.ai, Fathom, or upload files directly.</p>
+                <span class="step-arrow"><i class="fas fa-arrow-right"></i></span>
+            </div>
+
+            <div class="step-card" onclick="showToast('info', 'Step 2', 'AI processes your meeting')">
+                <div class="step-number">2</div>
+                <h3>Process</h3>
+                <p>Our AI transcribes, summarizes, and extracts key information automatically.</p>
+                <span class="step-arrow"><i class="fas fa-arrow-right"></i></span>
+            </div>
+
+            <div class="step-card" onclick="showToast('info', 'Step 3', 'Review the output')">
+                <div class="step-number">3</div>
+                <h3>Review</h3>
+                <p>Check and approve AI-generated summaries, emails, and action items.</p>
+                <span class="step-arrow"><i class="fas fa-arrow-right"></i></span>
+            </div>
+
+            <div class="step-card" onclick="showToast('info', 'Step 4', 'Everything syncs automatically')">
+                <div class="step-number">4</div>
+                <h3>Automate</h3>
+                <p>Approved content is automatically sent and synced to your tools.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="features" id="testimonials" style="background: var(--bg-secondary);">
+        <div class="section-title">
+            <h2>What Our Users Say</h2>
+            <p>Join thousands of teams saving hours every week.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card" style="text-align: left;">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                    <div
+                        style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        JM</div>
+                    <div>
+                        <strong style="color: var(--text-primary);">John Miller</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">CEO, TechStart Inc.</p>
+                    </div>
+                </div>
+                <p>"WorkflowAI has transformed how our team handles client meetings. We save at least 5 hours per week
+                    on follow-ups alone."</p>
+                <div style="color: #ffc107; margin-top: 15px;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="feature-card" style="text-align: left;">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                    <div
+                        style="width: 50px; height: 50px; border-radius: 50%; background: var(--secondary-green); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        SL</div>
+                    <div>
+                        <strong style="color: var(--text-primary);">Sarah Lee</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Project Manager, Design
+                            Co.</p>
+                    </div>
+                </div>
+                <p>"The AI summaries are incredibly accurate. It's like having a dedicated assistant in every meeting."
+                </p>
+                <div style="color: #ffc107; margin-top: 15px;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+
+            <div class="feature-card" style="text-align: left;">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                    <div
+                        style="width: 50px; height: 50px; border-radius: 50%; background: var(--secondary-orange); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        MK</div>
+                    <div>
+                        <strong style="color: var(--text-primary);">Mike Kim</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">Director, Agency Labs
+                        </p>
+                    </div>
+                </div>
+                <p>"The Monday.com integration is seamless. Action items go straight to our boards without any manual
+                    work."</p>
+                <div style="color: #ffc107; margin-top: 15px;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="pricing">
+        <h2>Ready to Automate Your Meetings?</h2>
+        <p>Start your free 14-day trial today. No credit card required.</p>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="dashboard.html" class="btn btn-primary btn-lg">
+                <i class="fas fa-rocket"></i> Start Free Trial
+            </a>
+            <a href="#" class="btn btn-outline btn-lg" onclick="showToast('info', 'Demo', 'Scheduling demo...')">
+                <i class="fas fa-calendar"></i> Book a Demo
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3><i class="fas fa-robot"></i> WorkflowAI</h3>
+                <p>Transforming meeting recordings into automated workflows. Save time, never miss action items, and
+                    keep your clients happy.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Reference</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 WorkflowAI. All rights reserved. Made with <i class="fas fa-heart"
+                    style="color: var(--primary);"></i> for productive teams.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Toast Notification
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'fa-check-circle';
+            if (type === 'warning') icon = 'fa-exclamation-circle';
+            if (type === 'info') icon = 'fa-info-circle';
+
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas ${icon}"></i></div>
+                <div class="toast-content">
+                    <div class="title">${title}</div>
+                    <div class="message">${message}</div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+    </script>
+</body>
+
+</html>

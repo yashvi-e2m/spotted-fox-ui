@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - WorkflowAI</title>
+    <meta name="description"
+        content="Your meeting workflow dashboard. View stats, recent meetings, and manage your automated workflow.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1><a href="index.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
+        </div>
+
+        <nav>
+            <div class="nav-section">
+                <div class="nav-section-title">Main</div>
+                <a class="nav-item active" href="dashboard.html">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="meetings.html">
+                    <i class="fas fa-video"></i>
+                    <span>Meetings</span>
+                    <span class="badge">5</span>
+                </a>
+                <a class="nav-item" href="transcripts.html">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Transcripts</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">AI Processing</div>
+                <a class="nav-item" href="summaries.html">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Summaries</span>
+                </a>
+                <a class="nav-item" href="action-items.html">
+                    <i class="fas fa-tasks"></i>
+                    <span>Action Items</span>
+                    <span class="badge">12</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Settings</div>
+                <a class="nav-item" href="settings.html">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="page-header-left">
+                <h2>Dashboard</h2>
+                <p>Welcome back! Here's your meeting workflow overview.</p>
+            </div>
+            <div class="page-header-actions">
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </div>
+                <a href="settings.html" class="btn btn-secondary">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+                <button class="btn btn-primary" onclick="openModal('fathomImportModal')">
+                    <i class="fas fa-link"></i> Import from Fathom
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card blue">
+                <div class="icon"><i class="fas fa-video"></i></div>
+                <h3>24</h3>
+                <p>Meetings Processed</p>
+            </div>
+            <div class="stat-card green">
+                <div class="icon"><i class="fas fa-tasks"></i></div>
+                <h3>87</h3>
+                <p>Action Items Created</p>
+            </div>
+            <div class="stat-card orange">
+                <div class="icon"><i class="fas fa-envelope"></i></div>
+                <h3>18</h3>
+                <p>Emails Sent</p>
+            </div>
+            <div class="stat-card yellow">
+                <div class="icon"><i class="fas fa-clock"></i></div>
+                <h3>5</h3>
+                <p>Pending Review</p>
+            </div>
+        </div>
+
+        <!-- Quick Overview Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 25px;">
+            <!-- Recent Meetings -->
+            <div class="content-card">
+                <div class="section-header">
+                    <h3><i class="fas fa-video"></i> Recent Meetings</h3>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select class="form-control" id="dashboardClientFilter"
+                            style="width: auto; padding: 6px 12px; font-size: 0.85rem;"
+                            onchange="filterDashboardMeetings()">
+                            <option value="">All Clients</option>
+                            <option value="techcorp">TechCorp Inc.</option>
+                            <option value="mediapro">MediaPro LLC</option>
+                            <option value="acme">Acme Corp</option>
+                            <option value="internal">Internal</option>
+                        </select>
+                        <a href="meetings.html" class="btn btn-secondary"
+                            style="padding: 8px 15px; font-size: 0.85rem;">View All</a>
+                    </div>
+                </div>
+
+                <div class="meeting-card" data-client="techcorp" onclick="openModal('meetingDetailModal')"
+                    style="cursor: pointer;">
+                    <div class="meeting-card-header">
+                        <div>
+                            <div class="meeting-title">Kickoff Meeting - Website Redesign Project</div>
+                            <span class="meeting-type type-kickoff">Kickoff</span>
+                        </div>
+                        <span class="priority high">High Priority</span>
+                    </div>
+                    <div class="meeting-meta">
+                        <span><i class="fas fa-calendar"></i> Today, 10:30 AM</span>
+                        <span><i class="fas fa-clock"></i> 45 minutes</span>
+                        <span><i class="fas fa-building"></i> TechCorp Inc.</span>
+                    </div>
+                    <div class="meeting-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>75% Complete</span>
+                            <span>Pending: Human Review</span>
+                        </div>
+                    </div>
+                    <div class="meeting-actions">
+                        <a href="transcripts.html" class="action-btn" onclick="event.stopPropagation()"><i
+                                class="fas fa-file-alt"></i> View Transcript</a>
+                        <a href="summaries.html" class="action-btn" onclick="event.stopPropagation()"><i
+                                class="fas fa-brain"></i> AI Summary</a>
+                        <a href="action-items.html" class="action-btn" onclick="event.stopPropagation()"><i
+                                class="fas fa-tasks"></i> 6 Action Items</a>
+                    </div>
+                </div>
+
+                <div class="meeting-card" data-client="mediapro" onclick="openModal('meetingDetailModal')"
+                    style="cursor: pointer;">
+                    <div class="meeting-card-header">
+                        <div>
+                            <div class="meeting-title">Weekly Client Sync - Marketing Campaign</div>
+                            <span class="meeting-type type-followup">Follow-up</span>
+                        </div>
+                        <span class="priority medium">Medium Priority</span>
+                    </div>
+                    <div class="meeting-meta">
+                        <span><i class="fas fa-calendar"></i> Yesterday, 2:00 PM</span>
+                        <span><i class="fas fa-clock"></i> 30 minutes</span>
+                        <span><i class="fas fa-building"></i> MediaPro LLC</span>
+                    </div>
+                    <div class="meeting-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>100% Complete</span>
+                            <span>Email Sent ✓</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div>
+                <!-- Pending Action Items -->
+                <div class="content-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-tasks"></i> Pending Tasks</h3>
+                        <a href="action-items.html" class="btn btn-secondary"
+                            style="padding: 5px 10px; font-size: 0.8rem;">View All</a>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-checkbox" onclick="toggleCheckbox(this)"></div>
+                        <div class="action-content">
+                            <div class="title">Send brand assets to client</div>
+                            <div class="details">
+                                <span><i class="fas fa-user"></i> Sarah</span>
+                                <span class="priority high">High</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-checkbox" onclick="toggleCheckbox(this)"></div>
+                        <div class="action-content">
+                            <div class="title">Schedule follow-up demo</div>
+                            <div class="details">
+                                <span><i class="fas fa-user"></i> Mike</span>
+                                <span class="priority medium">Medium</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-checkbox" onclick="toggleCheckbox(this)"></div>
+                        <div class="action-content">
+                            <div class="title">Update project timeline</div>
+                            <div class="details">
+                                <span><i class="fas fa-user"></i> Alex</span>
+                                <span class="priority low">Low</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-checkbox" onclick="toggleCheckbox(this)"></div>
+                        <div class="action-content">
+                            <div class="title">Review design mockups</div>
+                            <div class="details">
+                                <span><i class="fas fa-user"></i> Brad</span>
+                                <span class="priority medium">Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="content-card">
+                    <div class="section-header">
+                        <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                    </div>
+
+                    <div class="timeline-item"
+                        onclick="showToast('info', 'Email Details', 'Viewing email sent to TechCorp...')"
+                        style="cursor: pointer;">
+                        <div class="timeline-icon green"><i class="fas fa-check"></i></div>
+                        <div class="timeline-content">
+                            <div class="title">Email sent to TechCorp</div>
+                            <div class="time">5 minutes ago</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="showToast('info', 'Monday.com', 'Opening Monday.com tasks...')"
+                        style="cursor: pointer;">
+                        <div class="timeline-icon blue"><i class="fas fa-tasks"></i></div>
+                        <div class="timeline-content">
+                            <div class="title">6 tasks created in Monday</div>
+                            <div class="time">15 minutes ago</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="window.location.href='summaries.html'" style="cursor: pointer;">
+                        <div class="timeline-icon orange"><i class="fas fa-brain"></i></div>
+                        <div class="timeline-content">
+                            <div class="title">AI summary generated</div>
+                            <div class="time">20 minutes ago</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" onclick="window.location.href='transcripts.html'"
+                        style="cursor: pointer;">
+                        <div class="timeline-icon blue"><i class="fas fa-file-alt"></i></div>
+                        <div class="timeline-content">
+                            <div class="title">Transcript processed</div>
+                            <div class="time">25 minutes ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            <p>&copy; 2026 WorkflowAI. All rights reserved. | <a href="index.html">Home</a> | <a
+                    href="settings.html">Settings</a> | <a href="#">Help</a></p>
+        </footer>
+    </main>
+
+    <!-- Upload Recording Modal -->
+    <div class="modal-overlay" id="uploadModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-upload"></i> Upload Meeting Recording</h3>
+                <button class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Meeting Title</label>
+                    <input type="text" class="form-control" placeholder="e.g., Client Kickoff - Acme Corp">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Meeting Type</label>
+                        <select class="form-control">
+                            <option value="">Select type...</option>
+                            <option value="kickoff">Kickoff Meeting</option>
+                            <option value="followup">Follow-up</option>
+                            <option value="review">Review</option>
+                            <option value="planning">Planning</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Client/Project</label>
+                        <select class="form-control">
+                            <option value="">Select client...</option>
+                            <option value="techcorp">TechCorp Inc.</option>
+                            <option value="mediapro">MediaPro LLC</option>
+                            <option value="internal">Internal</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Upload Recording File</label>
+                    <div style="border: 2px dashed var(--border-color); border-radius: 10px; padding: 40px; text-align: center; cursor: pointer;"
+                        onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"
+                            style="font-size: 2rem; color: var(--text-muted); margin-bottom: 10px;"></i>
+                        <p style="color: var(--text-secondary);">Drag & drop your file here or click to browse</p>
+                        <p style="color: var(--text-muted); font-size: 0.8rem;">Supports MP3, MP4, WAV, M4A</p>
+                        <input type="file" id="fileInput" style="display: none;" accept=".mp3,.mp4,.wav,.m4a"
+                            onchange="handleFileSelect(this)">
+                    </div>
+                    <div id="selectedFile"
+                        style="display: none; margin-top: 15px; padding: 10px; background: var(--primary-pale); border-radius: 8px;">
+                        <i class="fas fa-file-audio" style="color: var(--primary);"></i>
+                        <span id="fileName" style="margin-left: 10px;"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('uploadModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="startProcessing()">
+                    <i class="fas fa-rocket"></i> Start Processing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fathom Import Modal -->
+    <div class="modal-overlay" id="fathomImportModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-link"></i> Import from Fathom</h3>
+                <button class="modal-close" onclick="closeModal('fathomImportModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <div
+                        style="width: 80px; height: 80px; margin: 0 auto 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-video" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h4 style="color: var(--text-primary); margin-bottom: 5px;">Connect to Fathom</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Paste your Fathom meeting URL to
+                        import the recording</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Fathom Meeting URL</label>
+                    <input type="url" class="form-control" id="fathomUrl" placeholder="https://fathom.video/share/..."
+                        style="font-size: 1rem; padding: 12px 15px;">
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 8px;"><i
+                            class="fas fa-info-circle"></i> You can find this URL by clicking "Share" in Fathom</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Meeting Type</label>
+                        <select class="form-control">
+                            <option value="">Select type...</option>
+                            <option value="kickoff">Kickoff Meeting</option>
+                            <option value="followup">Follow-up</option>
+                            <option value="review">Review</option>
+                            <option value="planning">Planning</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Client</label>
+                        <select class="form-control">
+                            <option value="">Select client...</option>
+                            <option value="techcorp">TechCorp Inc.</option>
+                            <option value="mediapro">MediaPro LLC</option>
+                            <option value="acme">Acme Corp</option>
+                            <option value="internal">Internal</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('fathomImportModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="importFromFathom()">
+                    <i class="fas fa-download"></i> Import Meeting
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meeting Detail Modal -->
+    <div class="modal-overlay" id="meetingDetailModal">
+        <div class="modal" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-video"></i> Meeting Details</h3>
+                <button class="modal-close" onclick="closeModal('meetingDetailModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4 style="margin-bottom: 15px; color: var(--text-primary);">Kickoff Meeting - Website Redesign
+                    Project
+                </h4>
+                <div style="display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <span style="color: var(--text-secondary);"><i class="fas fa-calendar"></i> Today, 10:30
+                        AM</span>
+                    <span style="color: var(--text-secondary);"><i class="fas fa-clock"></i> 45 minutes</span>
+                    <span style="color: var(--text-secondary);"><i class="fas fa-building"></i> TechCorp Inc.</span>
+                </div>
+
+                <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <h5 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-users"></i>
+                        Participants
+                    </h5>
+                    <p style="color: var(--text-secondary);">Brad (Project Lead), Sarah (Designer), Mike
+                        (Developer),
+                        John Smith (Client)</p>
+                </div>
+
+                <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                    <h5 style="margin-bottom: 10px; color: var(--primary);"><i class="fas fa-brain"></i> AI Summary
+                    </h5>
+                    <p style="color: var(--text-secondary);">This kickoff meeting focused on the website redesign
+                        project for TechCorp. Key decisions include a mobile-first approach, CRM integration, and a
+                        12-week timeline.</p>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="transcripts.html" class="btn btn-secondary"><i class="fas fa-file-alt"></i> View
+                        Transcript</a>
+                    <a href="summaries.html" class="btn btn-secondary"><i class="fas fa-brain"></i> Full Summary</a>
+                    <a href="action-items.html" class="btn btn-secondary"><i class="fas fa-tasks"></i> Action
+                        Items</a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('meetingDetailModal')">Close</button>
+                <button class="btn btn-primary" onclick="reviewMeeting()"><i class="fas fa-check"></i> Review &
+                    Approve</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+
+        // Toggle checkbox
+        function toggleCheckbox(element) {
+            element.classList.toggle('checked');
+            const actionItem = element.closest('.action-item');
+            const title = actionItem.querySelector('.title');
+            if (element.classList.contains('checked')) {
+                title.style.textDecoration = 'line-through';
+                title.style.color = 'var(--text-muted)';
+                showToast('success', 'Task Complete', 'Task marked as complete!');
+            } else {
+                title.style.textDecoration = 'none';
+                title.style.color = 'var(--text-primary)';
+            }
+        }
+
+        // File Upload Handler
+        function handleFileSelect(input) {
+            if (input.files && input.files[0]) {
+                document.getElementById('fileName').textContent = input.files[0].name;
+                document.getElementById('selectedFile').style.display = 'block';
+            }
+        }
+
+        // Toast Notification
+        function showToast(type, title, message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            let icon = 'fa-check-circle';
+            if (type === 'warning') icon = 'fa-exclamation-circle';
+            if (type === 'info') icon = 'fa-info-circle';
+
+            toast.innerHTML = `
+                <div class="toast-icon"><i class="fas ${icon}"></i></div>
+                <div class="toast-content">
+                    <div class="title">${title}</div>
+                    <div class="message">${message}</div>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'toastSlide 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Simulated Actions
+        function startProcessing() {
+            closeModal('uploadModal');
+            showToast('success', 'Upload Started', 'Your meeting recording is being processed...');
+            document.getElementById('selectedFile').style.display = 'none';
+        }
+
+        function reviewMeeting() {
+            closeModal('meetingDetailModal');
+            showToast('success', 'Approved!', 'Meeting reviewed and actions sent.');
+        }
+
+        // Import from Fathom
+        function importFromFathom() {
+            const url = document.getElementById('fathomUrl').value;
+            if (!url) {
+                showToast('warning', 'URL Required', 'Please enter a Fathom meeting URL.');
+                return;
+            }
+            if (!url.includes('fathom')) {
+                showToast('warning', 'Invalid URL', 'Please enter a valid Fathom URL.');
+                return;
+            }
+            closeModal('fathomImportModal');
+            showToast('success', 'Importing...', 'Fetching meeting from Fathom. This may take a moment.');
+            document.getElementById('fathomUrl').value = '';
+        }
+
+        // Filter Dashboard Meetings
+        function filterDashboardMeetings() {
+            const filter = document.getElementById('dashboardClientFilter').value;
+            const meetings = document.querySelectorAll('.meeting-card');
+
+            meetings.forEach(meeting => {
+                const client = meeting.dataset.client;
+                if (!filter || client === filter) {
+                    meeting.style.display = '';
+                } else {
+                    meeting.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
