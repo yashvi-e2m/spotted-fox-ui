@@ -8,47 +8,39 @@
     <meta name="description"
         content="Your meeting workflow dashboard. View stats, recent meetings, and manage your automated workflow.">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 
 <body>
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h1><a href="index.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
+            <h1><a href="dashboard.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
         </div>
 
         <nav>
+            <!-- Clients Section -->
             <div class="nav-section">
-                <div class="nav-section-title">Main</div>
-                <a class="nav-item active" href="dashboard.html">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                <div class="nav-section-title">Clients</div>
+                <a class="nav-item" href="../clients/techcorp.html">
+                    <i class="fas fa-building"></i>
+                    <span>TechCorp Inc.</span>
                 </a>
-                <a class="nav-item" href="meetings.html">
-                    <i class="fas fa-video"></i>
-                    <span>Meetings</span>
-                    <span class="badge">5</span>
+                <a class="nav-item" href="../clients/mediapro.html">
+                    <i class="fas fa-building"></i>
+                    <span>MediaPro LLC</span>
                 </a>
-                <a class="nav-item" href="transcripts.html">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Transcripts</span>
+                <a class="nav-item" href="../clients/acme.html">
+                    <i class="fas fa-building"></i>
+                    <span>Acme Corp</span>
+                </a>
+                <a class="nav-item" href="../clients/internal.html">
+                    <i class="fas fa-users"></i>
+                    <span>Internal</span>
                 </a>
             </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">AI Processing</div>
-                <a class="nav-item" href="summaries.html">
-                    <i class="fas fa-brain"></i>
-                    <span>AI Summaries</span>
-                </a>
-                <a class="nav-item" href="action-items.html">
-                    <i class="fas fa-tasks"></i>
-                    <span>Action Items</span>
-                    <span class="badge">12</span>
-                </a>
-            </div>
-
+            <!-- Settings -->
             <div class="nav-section">
                 <div class="nav-section-title">Settings</div>
                 <a class="nav-item" href="settings.html">
@@ -474,11 +466,7 @@
             localStorage.setItem('theme', newTheme);
         }
 
-        // Load saved theme
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        });
+        // Theme loading is handled in the DOMContentLoaded at the end of the script
 
         // Modal Functions
         function openModal(modalId) {
@@ -575,20 +563,87 @@
             document.getElementById('fathomUrl').value = '';
         }
 
+        // Client Selection
+        function selectClient(event, clientId) {
+            event.preventDefault();
+            localStorage.setItem('selectedClient', clientId);
+
+            // Update active state in sidebar
+            document.querySelectorAll('.client-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.client === clientId) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update the dropdown filter to match
+            const filterDropdown = document.getElementById('dashboardClientFilter');
+            if (filterDropdown) {
+                filterDropdown.value = clientId;
+            }
+
+            // Trigger filtering
+            filterDashboardMeetings(clientId);
+        }
+
+        // Load selected client on page load
+        function loadSelectedClient() {
+            const selectedClient = localStorage.getItem('selectedClient') || '';
+
+            // Update sidebar active state
+            document.querySelectorAll('.client-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.client === selectedClient) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update dropdown
+            const filterDropdown = document.getElementById('dashboardClientFilter');
+            if (filterDropdown) {
+                filterDropdown.value = selectedClient;
+            }
+
+            // Apply filter
+            filterDashboardMeetings(selectedClient);
+        }
+
         // Filter Dashboard Meetings
-        function filterDashboardMeetings() {
-            const filter = document.getElementById('dashboardClientFilter').value;
+        function filterDashboardMeetings(clientId) {
+            // If called from dropdown, get value from dropdown
+            if (clientId === undefined) {
+                clientId = document.getElementById('dashboardClientFilter').value;
+                localStorage.setItem('selectedClient', clientId);
+
+                // Update sidebar active state
+                document.querySelectorAll('.client-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.client === clientId) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+
             const meetings = document.querySelectorAll('.meeting-card');
 
             meetings.forEach(meeting => {
                 const client = meeting.dataset.client;
-                if (!filter || client === filter) {
+                if (!clientId || client === clientId) {
                     meeting.style.display = '';
                 } else {
                     meeting.style.display = 'none';
                 }
             });
         }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // Load selected client
+            loadSelectedClient();
+        });
     </script>
 </body>
 

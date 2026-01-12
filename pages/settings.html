@@ -8,7 +8,7 @@
     <meta name="description"
         content="Configure your WorkflowAI settings including integrations, AI processing options, and review preferences.">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <style>
         .settings-section {
             background: var(--bg-primary);
@@ -240,42 +240,35 @@
 
 <body>
     <!-- Sidebar -->
+    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h1><a href="index.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
+            <h1><a href="dashboard.html"><i class="fas fa-robot"></i> <span>WorkflowAI</span></a></h1>
         </div>
 
         <nav>
+            <!-- Clients Section -->
             <div class="nav-section">
-                <div class="nav-section-title">Main</div>
-                <a class="nav-item" href="dashboard.html">
-                    <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
+                <div class="nav-section-title">Clients</div>
+                <a class="nav-item" href="../clients/techcorp.html">
+                    <i class="fas fa-building"></i>
+                    <span>TechCorp Inc.</span>
                 </a>
-                <a class="nav-item" href="meetings.html">
-                    <i class="fas fa-video"></i>
-                    <span>Meetings</span>
-                    <span class="badge">5</span>
+                <a class="nav-item" href="../clients/mediapro.html">
+                    <i class="fas fa-building"></i>
+                    <span>MediaPro LLC</span>
                 </a>
-                <a class="nav-item" href="transcripts.html">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Transcripts</span>
+                <a class="nav-item" href="../clients/acme.html">
+                    <i class="fas fa-building"></i>
+                    <span>Acme Corp</span>
+                </a>
+                <a class="nav-item" href="../clients/internal.html">
+                    <i class="fas fa-users"></i>
+                    <span>Internal</span>
                 </a>
             </div>
 
-            <div class="nav-section">
-                <div class="nav-section-title">AI Processing</div>
-                <a class="nav-item" href="summaries.html">
-                    <i class="fas fa-brain"></i>
-                    <span>AI Summaries</span>
-                </a>
-                <a class="nav-item" href="action-items.html">
-                    <i class="fas fa-tasks"></i>
-                    <span>Action Items</span>
-                    <span class="badge">12</span>
-                </a>
-            </div>
-
+            <!-- Settings -->
             <div class="nav-section">
                 <div class="nav-section-title">Settings</div>
                 <a class="nav-item active" href="settings.html">
@@ -811,6 +804,40 @@
                 setTimeout(() => toast.remove(), 300);
             }, 4000);
         }
+
+        // Client Selection
+        function selectClient(event, clientId) {
+            event.preventDefault();
+            localStorage.setItem('selectedClient', clientId);
+
+            // Update active state in sidebar
+            document.querySelectorAll('.client-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.client === clientId) {
+                    item.classList.add('active');
+                }
+            });
+
+            showToast('info', 'Client Selected', 'Filter will be applied on other pages.');
+        }
+
+        // Load selected client on page load
+        function loadSelectedClient() {
+            const selectedClient = localStorage.getItem('selectedClient') || '';
+
+            // Update sidebar active state
+            document.querySelectorAll('.client-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.client === selectedClient) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Add loadSelectedClient to DOMContentLoaded (settings already has a DOMContentLoaded)
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSelectedClient();
+        });
     </script>
 </body>
 
